@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
 const connectDB = require("./config/db");
+const errorHandler = require('./middleware/error');
 
 // Load env vars
 dotenv.config({path:"./config/config.env"});
@@ -36,6 +37,9 @@ app.use('/api/v1/bootcamps', bootcamps)
                                                   
 // =================================================
 
+// Error handler middleware (Should be after mounting routes as otherwise it will not be able to
+// errors otherwise)
+app.use(errorHandler);
 
 
 
