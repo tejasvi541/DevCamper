@@ -29,7 +29,7 @@ exports.getBootcamps = asyncHandler(async (req,res,next) =>{
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
         // Finding resource
-        query = Bootcamp.find(JSON.parse(queryStr));
+        query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
 
         // Select Fields
         if (req.query.select) {
@@ -150,10 +150,12 @@ exports.updateBootcamp = asyncHandler(async (req,res,next) =>{
 // @access      Private
 exports.deleteBootcamp = asyncHandler(async (req,res,next) =>{
   
-        const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+        const bootcamp = await Bootcamp.findById(req.params.id);
         if(!bootcamp){
             return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
         }
+        // This will trigger the cascade middleware.
+        bootcamp.remove();
         res.status(201).json({
             success : true,
             data: {}
