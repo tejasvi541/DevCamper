@@ -25,13 +25,7 @@ exports.register = asyncHandler (async (req,res,next)=>{
         role
     });
 
-    // Create Token
-    const token = user.getSignedJwtToken();
-
-    res.status(200).json({
-        success : true,
-        token
-    });
+    sendTokenResponse(user, 200, res);
 }); 
 
 // ===================================== Login User ========================================//
@@ -63,12 +57,32 @@ exports.login = asyncHandler (async (req,res,next)=>{
         return next(new ErrorResponse('Invalid Credentials', 401));
     }
 
-    // Create Token
+    sendTokenResponse(user, 200, res); 
 
+}); 
+
+
+// Get token from model and create cookie and send response
+const sendTokenResponse = (user, statusCode, res) =>{
+
+    // Create Token
     const token = user.getSignedJwtToken();
 
-    res.status(200).json({
-        success : true,
-        token
-    });
-}); 
+    const options = {
+        expires : new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60*60 *1000),
+        httpOnly : true
+    };
+
+    // https in production
+    if(process.env.NODE_ENV === 'productions'){
+        options.secure = true;
+    }
+
+    res
+        .status(statusCode)
+        .cookie('token', token, options)
+        .json({
+            success:true,
+            token
+        });
+}
