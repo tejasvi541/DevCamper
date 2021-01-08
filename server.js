@@ -3,10 +3,17 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const mongoSanitize = require("express-mongo-sanitize");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const hpp = require("hpp");
+const rateLimit = require("express-rate-limit");
+const xssClean = require("xss-clean");
+const cors = require("cors");
 const fileupload = require("express-fileupload");
 const connectDB = require("./config/db");
 const errorHandler = require('./middleware/error');
+
 
 // Load env vars
 dotenv.config({path:"./config/config.env"});
@@ -38,6 +45,29 @@ app.use(cookieParser());
 if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'));
 }
+
+// Sanitize data
+app.use(mongoSanitize());
+
+// Adding headers for XSS protection
+app.use(helmet());
+
+// Cross site scripting attacks
+app.use(xssClean());
+
+// Rate limiting
+const limiter = rateLimit({
+    windowMs : 10*60*1000,
+    max:1000
+});
+
+app.use(limiter);
+
+// Prevent http param pollution
+app.use(hpp());
+
+// Enabling cross origin resource sharing
+app.use(cors());
 
 //File Uploading middleware
 app.use(fileupload());

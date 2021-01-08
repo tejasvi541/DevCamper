@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+   const jwt = require("jsonwebtoken");
 const asyncHandler = require("./async");
 const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/User");
@@ -9,7 +9,7 @@ exports.protect = asyncHandler(async (req,res,next)=>{
     let token ;
 
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer'))
-    {
+    {   // Set token from header
         token = req.headers.authorization.split(" ")[1];
 
     }
@@ -43,5 +43,4 @@ exports.authorize = (...roles) =>{
         next();
     }   
 }
-
 
