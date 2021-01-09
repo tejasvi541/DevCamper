@@ -38,7 +38,7 @@ node seeder -i
 
 The API is not live yet but will be .
 
-Extensive documentation with examples [here](https://documenter.getpostman.com/view/13991317/TVzPneE4t)
+Extensive documentation with examples [here](ttps://documenter.getpostman.com/view/13991317/TVzPneE4)
 
 - Version: 1.0.0
 - License: MIT
