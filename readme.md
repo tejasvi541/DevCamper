@@ -36,7 +36,7 @@ node seeder -i
 
 ## Demo
 
-The API is live at [devcamper.ml](https://devcamper.ml)
+The API is not live yet but will be .
 
 Extensive documentation with examples [here](https://documenter.getpostman.com/view/13991317/TVzPneE4t)
 
