@@ -53,7 +53,7 @@ app.use(mongoSanitize());
 app.use(helmet());
 
 // Cross site scripting attacks
-app.use(xssClean());
+// app.use(xssClean());
 
 // Rate limiting
 const limiter = rateLimit({
